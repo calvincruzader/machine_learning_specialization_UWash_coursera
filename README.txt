@@ -1,0 +1,1 @@
+IPython Notebook does not look pretty on github (at least from what I see on my machine). Best to export it and run locally with Python/Jupyter/your choice of GUI/etc. installed.
