@@ -1,0 +1,67 @@
+course1_week6_deep_learning_notes
+
+typical local detectors look for locally "interesting points" in an image 
+	image features := collections of locally interesting points 
+		combine to build classifiers 
+
+scene understanding 
+	sky mountains grass 
+	
+deep learning challenges 
+	pros:
+		enables learning of features rather than hand tuning 
+		
+		impressive performance gains 
+			vision/speech/text analysis
+			
+	cons: 
+		requires lots of data for high accuracy
+		computationally really expensive
+		extremely hard to tune 
+		
+----
+
+standard image classification approach 
+	based on an image, create a vector of interesting points and feed that to determine if that image is, say, a face
+		similar to bag of words using tfidf, the more interesting portions of the image are considered 
+	so, basic flow is:
+		input -> extract features -> use simple classifier 
+		if handpicked, very painful
+	in deep learning: implicitly learns features 
+		
+
+-----------
+deep features 
+	transfer learning 
+		using a trained model for new data 
+		
+Assignment Learning outcomes
+
+	Execute image retrieval code with the iPython notebook
+	Use the .sketch_summary() method to view statistics of data
+	Load and transform real, image data
+	Build image retrieval models using nearest neighbor search and deep features
+	Compare the results of various image retrieval models
+	Use the .apply() and .sum() methods on SFrames to compute functions of the data.
+	
+--------
+What is the least common category in the training data?
+	birds 	
+	
+What is the id of the nearest cat neighbor given the test_cat_image?
+	16289
+	
+What is the id of the nearest cat neighbor given the test_cat_image?
+	16976
+
+In this question, you will use these distances to perform a classification task, using the idea of a nearest-neighbors classifier.
+
+Compute the mean distance between this image at its 5 nearest neighbors that were labeled ‘cat’ in the training data 
+	36.156
+
+Compute the mean distance between this image at its 5 nearest neighbors that were labeled ‘dog’ in the training data 
+	37.771
+	
+ Using the work you did in this question, what is the accuracy of the 1-nearest neighbor classifier at classifying ‘dog’ images from the test set? 
+	67.8%
+

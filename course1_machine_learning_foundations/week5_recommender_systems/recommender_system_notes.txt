@@ -1,0 +1,107 @@
+personalization - want to connect what I want to other things that I might want 
+	movies, products, music, friends, drug-target interactions 
+
+building a recommender system using classification 
+	maybe just want to sort articles that are most popular 
+		lacks personalization 
+	
+	classification model, use features of both product and users to determine what a user might like 
+		user info, purchase history, purchase info, other info
+		
+		pros:
+			personalized 
+			features can capture context
+			handles limited user history 
+				age might determine what a person might like 
+				
+		cons: 
+			features may not be available
+			doesn't perform as well as collaborative filtering methods
+			
+	collaborative filtering : people who bought this also bought this!			
+		co-occurrence matrix 
+			2D symmetrical matrix of items that shows if someone bought an item, how many they bought of another item at some point in the future (not simultaneously)
+		making recommendations using co-occurrences
+			look at a row from the matrix 
+				sort, and recommend the items with the largest counts 
+			
+			values in a co-occurrence matrix must be normalized 
+				what happens when there are very popular items??
+					diapers vs every other items to buy for babies, drowns out all the other items/effects
+				Jaccard similarity: normalizes by popularity 
+					people who purchased i AND j divided by people who purchased i OR j 
+					cons: 
+						only current page matters, no history 
+					
+					weighted average of purchased items 
+						average over the number of items bought when purchased milk and then #items bought when purchased diapers to recommend someone to buy baby wipes
+						
+						cons:
+							no context (time of day)
+							no user features/ not personalized
+							no product features, no notion of different properites of the product to drive these recommendations 
+							cold start problem: what if a new user or product arrives? no information of history/past purchases
+							
+	maybe use matrix factorization!
+matrix factorization, discover hidden structure
+	matrix completion problem 
+		a set of known cells and a set of white cells (unknown values)
+			goal: find missing data (white cells)
+				BUT how do you guess what rating a person will give to a movie they've never watched??
+				
+				describe some_movie (product) with topics (features) shown as values in a vector
+					movie_vector = [action=0.3, romance=0.5, drama=1.4 ...]
+				describe some_user (person) with topics (features) 
+					user_vector [action=2.5, romance=1.0, drama=0.1 ...]
+				rating_estimation, calculate the similarity between a product and a user via feature values 
+					calculation: sum(movie_vector .* user_vector)
+				
+				using rating_estimation, we sort by predicted calculation of user_vector for all movies, and then choose the largest rating_estimations for which to recommend to the user 
+				
+	prediction in matrix form 
+		Supposes we have a rating_estimation matrix with dimensions (num_users x num_product)
+			each cell a rating_estimation s.t. sum(user_vector_i .* product_vector_j)
+			BUT we don't have all these estimations for users! (and maybe even for movies too)
+				so we can estimate these values for every user and for every movie based on our observed ratings!
+					to put another way, using only known values, we can estimate unknown values 
+					
+					we do this by: 
+						1.) RSS(L,R) = (Rating(u,v) - sum(user_vector_i, product_vector_j)) ^ 2  + sum(all_known_ratings) ## distance metric between prediction and known rating values)
+						2.) See how well you did for all known values in the matrix 
+						3.) for each unknown cell in the matrix: search over all user_vectors and product_vectors and see which combination best fits the rating
+						
+		called the matrix factorization model: taking a matrix and approximating it with a factorization 
+			there are many efficient algorithms for factorization!
+			
+	cons: 
+		cold start problem: still cannot handle new user or a new movie (blank row,column combination in the rating_estimation matrix 
+		
+bringing it all together:
+	in our features-based classification approach, we saw the case where we had limited user data (like how we determined the price for our house that we want to sell)
+	in our matrix factorization approach, we capture relationships between users and items/products and learn features of those users and items/products 
+		can we integrate these two???? model blending
+	
+	features capture context, ex: time of day, what i just saw, user info, past purchases 
+	matrix factorization captures groups of users who behave similarly 
+		we can combine them to mitigate the cold-start problem
+			estimate features for a new user based on just that user's current features 
+			once more information is discovered, maxtrix factorization topics become more relevant 
+				as we continue to know more about the person, we can continue supplying them with estimations of what they might like next 
+	 
+performance metrics for recommender systems 
+	precision and recall 
+		recall: how many of all the items that i liked were actually recommended to me? (num_liked_and_shown / num_total_likes)
+		precision: how many of the items shown were ones i actually liked? (num_liked_and_shown / num_shown) 
+			how much garbage do i have to look at before i find items that i like?
+			
+	optimal recommender: recommend me only items that I like. recall = precision = 1 
+	
+	precision-recall curve  
+		a metric for best recommender curve is the one with the largest area under the curve 
+	
+	
+	
+	
+	
+				
+				
